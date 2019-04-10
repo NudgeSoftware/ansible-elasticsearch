@@ -5,7 +5,7 @@
 - name: Create Directories
   become: yes
   file: path={{ item }} state=directory owner={{ es_user }} group={{ es_group }}
-  with_items:
+  loop:
     - "{{pid_dir}}"
     - "{{log_dir}}"
     - "{{conf_dir}}"
@@ -13,9 +13,7 @@
 - name: Create Data Directories
   become: yes
   file: path={{ item }} state=directory owner={{ es_user }} group={{ es_group }}
-  with_items:
-    - "{{data_dirs}}"
-
+  loop: "{{data_dirs}}"
 
 #Copy the config template
 - name: Copy Configuration File

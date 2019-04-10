@@ -17,7 +17,7 @@
   become: yes
   command: >
     {{es_home}}/bin/x-pack/users userdel {{item}}
-  with_items: "{{users_to_remove | default([])}}"
+  loop: "{{users_to_remove | default([])}}"
   when: manage_file_users
   environment:
     CONF_DIR: "{{ conf_dir }}"
@@ -31,7 +31,7 @@
   become: yes
   command: >
     {{es_home}}/bin/x-pack/users useradd {{item}} -p {{es_users.file[item].password}}
-  with_items: "{{ users_to_add | default([]) }}"
+  loop: "{{ users_to_add | default([]) }}"
   when: manage_file_users
   no_log: True
   environment:
@@ -43,7 +43,7 @@
   become: yes
   command: >
     {{es_home}}/bin/x-pack/users passwd {{ item }} -p {{es_users.file[item].password}}
-  with_items: "{{ es_users.file.keys() | default([]) }}"
+  loop: "{{ es_users.file.keys() | default([]) }}"
   when: manage_file_users
   #Currently no easy way to figure out if the password has changed or to know what it currently is so we can skip.
   changed_when: False

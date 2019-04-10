@@ -68,7 +68,7 @@
     password: "{{es_api_basic_auth_password}}"
     force_basic_auth: yes
   when: manage_native_users
-  with_items: "{{ users_to_remove | default([]) }}"
+  loop: "{{ users_to_remove | default([]) }}"
 
 - set_fact: users_to_ignore={{ native_users.keys() | intersect (reserved_users) }}
   when: manage_native_users
@@ -90,7 +90,7 @@
     force_basic_auth: yes
   when: native_users[item].password is defined
   no_log: True
-  with_items: "{{ users_to_ignore | default([]) }}"
+  loop: "{{ users_to_ignore | default([]) }}"
 
 - set_fact: users_to_modify={{ native_users.keys() | difference (reserved_users) }}
   when: manage_native_users
@@ -108,7 +108,7 @@
     force_basic_auth: yes
   when: manage_native_users
   no_log: True
-  with_items: "{{ users_to_modify | default([]) }}"
+  loop: "{{ users_to_modify | default([]) }}"
 
 ## ROLE CHANGES
 
@@ -151,7 +151,7 @@
     password: "{{es_api_basic_auth_password}}"
     force_basic_auth: yes
   when: manage_native_roles
-  with_items: "{{roles_to_remove | default([]) }}"
+  loop: "{{roles_to_remove | default([]) }}"
 
 - set_fact: roles_to_modify={{ es_roles.native.keys() | difference (reserved_roles) }}
   when: manage_native_roles
@@ -168,4 +168,4 @@
     password: "{{es_api_basic_auth_password}}"
     force_basic_auth: yes
   when: manage_native_roles
-  with_items: "{{ roles_to_modify | default([]) }}"
+  loop: "{{ roles_to_modify | default([]) }}"

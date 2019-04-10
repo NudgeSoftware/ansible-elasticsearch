@@ -44,8 +44,16 @@
   when: es_start_service
 
 - name: Wait for elasticsearch to startup
-  wait_for: host={{es_api_host}} port={{es_api_port}} delay=5 connect_timeout=1
+  wait_for: 
+    host: "{{es_api_host}}"
+    port: "{{es_api_port}}"
+    delay: 5
+    connect_timeout: 15
   when: es_restarted is defined and es_restarted.changed and es_start_service
+#   register: es_restarting
+#   until: not es_restarting is failed
+#   retries: 5
+#   delay: 5
 
 - set_fact: manage_native_realm=false
 

@@ -18,7 +18,7 @@
 - name: Debian - Add elasticsearch repository
   become: yes
   apt_repository: repo={{ item.repo }} state={{ item.state}}
-  with_items:
+  loop:
     - { repo: "{{ es_apt_url_old }}", state: "absent" }
     - { repo: "{{ es_apt_url }}", state: "present" }
   when: es_use_repository

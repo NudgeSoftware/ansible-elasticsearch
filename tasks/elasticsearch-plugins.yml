@@ -42,7 +42,7 @@
   become: yes
   command: "{{es_home}}/bin/elasticsearch-plugin remove {{item}} --silent"
   ignore_errors: yes
-  with_items: "{{ plugins_to_remove | default([]) }}"
+  loop: "{{ plugins_to_remove | default([]) }}"
   notify: restart elasticsearch
   register: plugin_removed
   environment:
@@ -55,7 +55,7 @@
   register: plugin_installed
   failed_when: "'ERROR' in plugin_installed.stdout"
   changed_when: plugin_installed.rc == 0
-  with_items: "{{ es_plugins }}"
+  loop: "{{ es_plugins }}"
   when: item.plugin in plugins_to_install
   notify: restart elasticsearch
   environment:
